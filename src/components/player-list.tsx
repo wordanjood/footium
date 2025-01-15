@@ -3,6 +3,7 @@ import { Player } from "@/types/club";
 import { SortByType } from "@/types/player-list";
 import { sortPlayers } from "@/utils/players";
 import { Box, Fade, FormLabel, Select, Switch, Text } from "@chakra-ui/react";
+import { v4 } from "uuid";
 import Image from "next/image";
 import React, { ChangeEvent, useState } from "react";
 
@@ -14,6 +15,8 @@ interface Props {
   handleAcademyFilter: () => void;
   loading: boolean;
 }
+
+const uuid = v4();
 
 const PlayerList = ({
   players,
@@ -67,8 +70,10 @@ const PlayerList = ({
             onChange={(value) => handleOrderBy(value)}
             width="160px"
           >
-            {orderByOptions.map(({ value, label }) => (
-              <option value={value}>{label}</option>
+            {orderByOptions.map(({ value, label }, index) => (
+              <option key={`${index}-${uuid}`} value={value}>
+                {label}
+              </option>
             ))}
           </Select>
         </Box>
@@ -85,9 +90,9 @@ const PlayerList = ({
           bg="rgba(39, 39, 39, 0.6)"
         >
           {!loading && players.length > 0 ? (
-            sortPlayers(players, orderBy).map((player, index) => (
+            sortPlayers(players, orderBy).map((player) => (
               <Box
-                key={index}
+                key={`${player.id}-${uuid}`}
                 display="flex"
                 alignItems="center"
                 justifyContent="space-between"
